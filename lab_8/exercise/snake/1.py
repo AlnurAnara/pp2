@@ -70,9 +70,9 @@ while running:
     snake_body.insert(0, list(snake_pos))
     
     # Check if snake eats food
-    if snake_pos == food_pos:
+    if snake_pos == food_pos: 
         score += 1
-        food_pos = generate_food()
+        food_pos = generate_food() #add a new food 
     else:
         snake_body.pop()
 
@@ -92,6 +92,7 @@ while running:
     
     pygame.draw.rect(screen, red, pygame.Rect(food_pos[0], food_pos[1], cell_size, cell_size))
     
+    # set the font and size of the score and level
     font = pygame.font.SysFont('Arial', 20)
     score_text = font.render(f'Score: {score}  Level: {level}', True, white)
     screen.blit(score_text, [10, 10])
