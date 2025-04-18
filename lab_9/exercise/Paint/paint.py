@@ -166,6 +166,7 @@ def toggle_rhombus_mode():
 
 def point_in_circle(point, circle_center, radius):
     return (point[0] - circle_center[0])**2 + (point[1] - circle_center[1])**2 <= radius**2
+#Calculates the squared difference in x-coordinates.and Calculates the squared difference in y-coordinates.
 
 def point_in_rect(point, rect_pos, width, height):
     return (rect_pos[0] <= point[0] <= rect_pos[0] + width and

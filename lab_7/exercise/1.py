@@ -1,63 +1,42 @@
 import pygame
-import sys
-from image_button import Button  
-from image import Pic  # Import the corrected Pic class
+import datetime
 
-# Colors
-red = (255, 0, 0)
-white = (255, 255, 255)
+pygame.init()
+screen = pygame.display.set_mode((920, 700))
+clock = pygame.time.Clock()
 
-def run():
-    pygame.init()
-    screen_width = 500
-    screen_height = 500
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Test Gaming")
+image = pygame.image.load('clock.png')
+image = pygame.transform.scale(image, (600, 600))
 
-    # Load and play music
-    pygame.mixer.music.load('Not_Like_Us_.Com_.mp3')  
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)  
+minute_img = pygame.image.load('min_hand.png')
+minute_img = pygame.transform.scale(minute_img, (600, 400))
+second_img = pygame.image.load('sec_hand.png')
+second_img = pygame.transform.scale(second_img, (600, 400))
 
-    music_paused = False  
-    running = True
+done = False
 
-    # Create button and picture object
-    button = Button(x=screen_width // 2 - 75, y=20, width=150, height=50, text='PAUSE')
-    pic = Pic(screen, 'pinggu.jpg', size=(200, 200), position=(150, 150))  # Load image
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True  
 
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False 
-                pygame.quit()
-                sys.exit()
+    current_time = datetime.datetime.now()
+    hour = int(current_time.strftime("%I"))
+    minute = int(current_time.strftime("%M"))
+    second = int(current_time.strftime("%S"))
 
-            if button.is_clicked(event):  
-                if music_paused:
-                    pygame.mixer.music.unpause()
-                    button.text = 'PAUSE'
-                else:
-                    pygame.mixer.music.pause()
-                    button.text = 'UNPAUSE'
+    hour_angle = (hour % 12 + minute / 60) * 30 * -1
+    minute_angle = minute * 6 * -1 - 30
+    second_angle = second * 6 * -1 - 50
 
-                music_paused = not music_paused  
+    rotated_minute = pygame.transform.rotate(minute_img, minute_angle)
+    rotated_second = pygame.transform.rotate(second_img, second_angle)
 
-            if event.type == pygame.KEYUP:
-                print(f'Pressed the key: {pygame.key.name(event.key)}')
-                if event.key == pygame.K_UP:
-                    pygame.mixer.music.unpause()
-                    button.text = 'PAUSE'
-                if event.key == pygame.K_DOWN:
-                    pygame.mixer.music.pause()
-                    button.text = 'UNPAUSE'
+    screen.fill((255, 255, 255))
+    screen.blit(image, (100, 100))
+    screen.blit(rotated_second, (400 - int(rotated_second.get_width() / 2), 400 - int(rotated_second.get_height() / 2)))
+    screen.blit(rotated_minute, (400 - int(rotated_minute.get_width() / 2), 400 - int(rotated_minute.get_height() / 2)))
+    pygame.display.flip()
+    clock.tick(60)
 
-        screen.fill(red)  # Set background color
-        
-        pic.output()  # Draw image
-        button.draw(screen)  # Draw button
-        pygame.draw.rect(screen, white, (50, 50, 50, 50))  # Draw extra rectangle
-
-        pygame.display.flip()  # Update display
-
-run()
+pygame.quit()
