@@ -1,6 +1,6 @@
 import pygame
 import sys
-from image_button import Button  
+from button import Button  
 from image import Pic
 
 black = (0, 0, 0)
